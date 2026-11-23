@@ -1,0 +1,13 @@
+</main>
+<footer class="rodape">
+  <a href="/termos">Termos de Uso</a> · <a href="/privacidade">Privacidade</a>
+  <% if (usuario) { %>
+    · <form method="post" action="/logout" class="inline"><input type="hidden" name="_csrf" value="<%= csrf %>"><button class="link">Sair</button></form>
+  <% } %>
+  <p>Projeto acadêmico · Fatec Mogi Mirim</p>
+</footer>
+<nav class="nav-base" aria-label="Navegação inferior">
+  <%- include('nav', { classe: 'base' }) %>
+</nav>
+</body>
+</html>

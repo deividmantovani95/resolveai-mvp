@@ -1,0 +1,20 @@
+<%- include('../partials/topo') %>
+<section class="tela tela-estreita">
+  <div class="boas-vindas">
+    <h1>Bem-vindo de volta</h1>
+    <p class="sub">Entre para continuar</p>
+  </div>
+  <% if (erro) { %><div class="alerta alerta-erro" role="alert"><%= erro %></div><% } %>
+  <form method="post" action="/login" class="form" novalidate>
+    <input type="hidden" name="_csrf" value="<%= csrf %>">
+    <%- include('../partials/campo', { nome: 'email', rotulo: 'E-mail', tipo: 'email', valor: email, erro: null, attrs: 'autocomplete="email" required placeholder="email@exemplo.com"' }) %>
+    <%- include('../partials/campo', { nome: 'senha', rotulo: 'Senha', tipo: 'password', valor: '', erro: null, attrs: 'autocomplete="current-password" required' }) %>
+    <button class="btn btn-primario btn-bloco">Entrar</button>
+  </form>
+  <div class="centro espaco">
+    <p class="sub">Ainda não tem conta?</p>
+    <p><a class="forte" href="/cadastro">Cadastre-se como cliente</a></p>
+    <p><a href="/cadastro/prestador">Quero oferecer meus serviços</a></p>
+  </div>
+</section>
+<%- include('../partials/fim') %>

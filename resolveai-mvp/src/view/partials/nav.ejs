@@ -1,0 +1,34 @@
+<%
+  const t = usuario ? usuario.tipo : null;
+  let itens;
+  if (t === 'prestador') itens = [
+    { href: '/prestador/servicos', ic: 'casa', txt: 'Início', id: 'inicio' },
+    { href: '/servicos', ic: 'busca', txt: 'Buscar', id: 'buscar' },
+    { href: '/pedidos', ic: 'lista', txt: 'Pedidos', id: 'pedidos' },
+    { href: '/perfil', ic: 'usuario', txt: 'Perfil', id: 'perfil' },
+  ];
+  else if (t === 'admin') itens = [
+    { href: '/admin', ic: 'escudo', txt: 'Painel', id: 'inicio' },
+    { href: '/servicos', ic: 'busca', txt: 'Serviços', id: 'buscar' },
+    { href: '/perfil', ic: 'usuario', txt: 'Perfil', id: 'perfil' },
+  ];
+  else if (t === 'cliente') itens = [
+    { href: '/', ic: 'casa', txt: 'Início', id: 'inicio' },
+    { href: '/servicos', ic: 'busca', txt: 'Buscar', id: 'buscar' },
+    { href: '/pedidos', ic: 'lista', txt: 'Pedidos', id: 'pedidos' },
+    { href: '/perfil', ic: 'usuario', txt: 'Perfil', id: 'perfil' },
+  ];
+  else itens = [
+    { href: '/', ic: 'casa', txt: 'Início', id: 'inicio' },
+    { href: '/servicos', ic: 'busca', txt: 'Buscar', id: 'buscar' },
+    { href: '/login', ic: 'usuario', txt: 'Entrar', id: 'perfil' },
+  ];
+  const atual = aba || (caminho === '/' || caminho === '/prestador/servicos' || caminho === '/admin' ? 'inicio'
+    : caminho.startsWith('/pedidos') ? 'pedidos' : caminho.startsWith('/perfil') || caminho === '/login' ? 'perfil'
+    : caminho.startsWith('/servicos') ? 'buscar' : '');
+%>
+<% itens.forEach((i) => { %>
+  <a href="<%= i.href %>" class="<%= atual === i.id ? 'ativo' : '' %>" <%- atual === i.id ? 'aria-current="page"' : '' %>>
+    <svg class="ic" aria-hidden="true"><use href="#i-<%= i.ic %>"/></svg><span><%= i.txt %></span>
+  </a>
+<% }) %>

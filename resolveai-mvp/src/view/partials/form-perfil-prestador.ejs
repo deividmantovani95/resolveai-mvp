@@ -1,0 +1,2 @@
+<%- include('campo', { nome: 'areaAtendimento', rotulo: 'Região de atendimento', valor: dados.areaAtendimento, erro: erros.areaAtendimento, attrs: 'required maxlength="160" placeholder="Ex.: Mogi Mirim e Mogi Guaçu"' }) %>
+<%- include('campo', { nome: 'descricao', rotulo: 'Sobre você', area: true, valor: dados.descricao, erro: erros.descricao, dica: 'Conte sua experiência e como você trabalha (aparece no seu perfil público).', attrs: 'required maxlength="600"' }) %>

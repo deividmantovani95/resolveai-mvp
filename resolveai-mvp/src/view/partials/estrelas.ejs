@@ -1,0 +1,6 @@
+<% const e = estrelas(media); %>
+<span class="estrelas" role="img" aria-label="Nota <%= Number(media).toFixed(1).replace('.', ',') %> de 5">
+  <% for (let i = 0; i < e.cheias; i++) { %><svg class="ic est cheia" aria-hidden="true"><use href="#i-estrela"/></svg><% } %>
+  <% if (e.meia) { %><span class="est-meia" aria-hidden="true"><svg class="ic est vazia"><use href="#i-estrela"/></svg><span><svg class="ic est cheia"><use href="#i-estrela"/></svg></span></span><% } %>
+  <% for (let i = 0; i < e.vazias; i++) { %><svg class="ic est vazia" aria-hidden="true"><use href="#i-estrela"/></svg><% } %>
+</span>

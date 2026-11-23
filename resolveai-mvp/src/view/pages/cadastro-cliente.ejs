@@ -1,0 +1,14 @@
+<%- include('../partials/topo') %>
+<section class="tela tela-estreita">
+  <h1>Criar conta</h1>
+  <p class="sub">Encontre profissionais para pequenos serviços na sua casa.</p>
+  <form method="post" action="/cadastro" class="form" novalidate>
+    <input type="hidden" name="_csrf" value="<%= csrf %>">
+    <%- include('../partials/form-dados-pessoais', { dados, erros, comSenha: true }) %>
+    <%- include('../partials/aceite', { erros }) %>
+    <button class="btn btn-primario btn-bloco">Criar conta</button>
+  </form>
+  <p class="centro espaco sub">Já possui conta? <a href="/login">Entrar</a></p>
+  <p class="centro sub">É prestador? <a href="/cadastro/prestador">Crie seu perfil profissional</a></p>
+</section>
+<%- include('../partials/fim') %>

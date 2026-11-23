@@ -1,0 +1,13 @@
+<a class="card-servico" href="/servicos/<%= s.id %>">
+  <span class="selo-cat cat-<%= s.categoria_slug %>"><svg class="ic" aria-hidden="true"><use href="#i-<%= ICONES_CATEGORIA[s.categoria_slug] %>"/></svg></span>
+  <span class="card-corpo">
+    <strong><%= s.titulo %></strong>
+    <span class="meta"><%= s.categoria_nome %> · <%= s.prestador_nome %></span>
+    <span class="linha-preco">
+      <span class="preco"><%= formatarPreco(s.preco) %></span>
+      <% if (s.total_avaliacoes > 0) { %>
+        <span class="nota-media"><svg class="ic est cheia" aria-hidden="true"><use href="#i-estrela"/></svg><%= s.media_avaliacoes.toFixed(1).replace('.', ',') %> <small>(<%= s.total_avaliacoes %>)</small></span>
+      <% } else { %><span class="nota-media novo">Novo</span><% } %>
+    </span>
+  </span>
+</a>

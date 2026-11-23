@@ -1,0 +1,26 @@
+<%#
+  Campo de formulário reutilizável.
+  Parâmetros: nome, rotulo, tipo, valor, erro, dica, attrs, area (textarea), opcoes ([{valor, texto}])
+%>
+<%
+  const idc = 'c-' + locals.nome;
+  const tipoC = locals.tipo || 'text';
+  const err = locals.erro;
+  const extra = (locals.attrs || '') + (err ? ' aria-invalid="true" aria-describedby="' + idc + '-erro"' : '');
+  const val = locals.valor == null ? '' : locals.valor;
+%>
+<div class="campo<%= err ? ' com-erro' : '' %>">
+  <label for="<%= idc %>"><%= locals.rotulo %></label>
+  <% if (locals.area) { %>
+    <textarea id="<%= idc %>" name="<%= locals.nome %>" rows="4" <%- extra %>><%= val %></textarea>
+  <% } else if (locals.opcoes) { %>
+    <select id="<%= idc %>" name="<%= locals.nome %>" <%- extra %>>
+      <option value="">Selecione…</option>
+      <% locals.opcoes.forEach((o) => { %><option value="<%= o.valor %>" <%= String(o.valor) === String(val) ? 'selected' : '' %>><%= o.texto %></option><% }) %>
+    </select>
+  <% } else { %>
+    <input id="<%= idc %>" name="<%= locals.nome %>" type="<%= tipoC %>" value="<%= tipoC === 'password' ? '' : val %>" <%- extra %>>
+  <% } %>
+  <% if (locals.dica && !err) { %><small class="dica"><%= locals.dica %></small><% } %>
+  <% if (err) { %><small class="erro" id="<%= idc %>-erro"><%= err %></small><% } %>
+</div>

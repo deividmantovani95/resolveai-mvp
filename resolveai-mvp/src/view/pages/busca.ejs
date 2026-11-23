@@ -1,0 +1,35 @@
+<%- include('../partials/topo') %>
+<section class="tela">
+  <h1>Serviços</h1>
+  <form action="/servicos" method="get" class="busca" role="search">
+    <svg class="ic" aria-hidden="true"><use href="#i-busca"/></svg>
+    <input type="search" name="q" value="<%= termo %>" placeholder="Buscar por serviço…" aria-label="Buscar por serviço">
+    <% if (categoria) { %><input type="hidden" name="categoria" value="<%= categoria.slug %>"><% } %>
+    <button class="btn btn-primario">Buscar</button>
+  </form>
+  <nav class="chips" aria-label="Filtrar por categoria">
+    <a class="chip <%= !categoria ? 'ativo' : '' %>" href="/servicos<%= termo ? '?q=' + encodeURIComponent(termo) : '' %>">Todas</a>
+    <% categorias.forEach((c) => { %>
+      <a class="chip <%= categoria && categoria.id === c.id ? 'ativo' : '' %>" href="/servicos?categoria=<%= c.slug %><%= termo ? '&q=' + encodeURIComponent(termo) : '' %>"><%= c.nome %></a>
+    <% }) %>
+  </nav>
+  <p class="sub"><%= resultado.total %> <%= resultado.total === 1 ? 'resultado' : 'resultados' %><%= categoria ? ' em ' + categoria.nome : '' %><%= termo ? ' para "' + termo + '"' : '' %></p>
+  <% if (resultado.itens.length) { %>
+    <div class="lista-cards">
+      <% resultado.itens.forEach((s) => { %><%- include('../partials/card-servico', { s }) %><% }) %>
+    </div>
+    <% if (resultado.paginas > 1) { %>
+      <nav class="paginacao" aria-label="Páginas">
+        <% for (let p = 1; p <= resultado.paginas; p++) { %>
+          <a class="<%= p === resultado.pagina ? 'ativo' : '' %>" href="?<%= categoria ? 'categoria=' + categoria.slug + '&' : '' %><%= termo ? 'q=' + encodeURIComponent(termo) + '&' : '' %>pagina=<%= p %>"><%= p %></a>
+        <% } %>
+      </nav>
+    <% } %>
+  <% } else { %>
+    <div class="vazio">
+      <p>Nenhum serviço encontrado.</p>
+      <a href="/servicos">Ver todos os serviços</a>
+    </div>
+  <% } %>
+</section>
+<%- include('../partials/fim') %>

@@ -1,0 +1,64 @@
+<%- include('../partials/topo') %>
+<%
+  const rotuloAcao = { aceita: 'Aceitar pedido', recusada: 'Recusar', em_andamento: 'Iniciar atendimento', concluida: 'Marcar como concluído', cancelada: 'Cancelar pedido' };
+  const contatoLiberado = ['aceita', 'em_andamento', 'concluida'].includes(sol.status);
+  const outro = papel === 'prestador'
+    ? { titulo: 'Cliente', nome: sol.cliente_nome, fone: sol.cliente_telefone, extra: sol.cliente_cidade }
+    : { titulo: 'Prestador', nome: sol.prestador_nome, fone: sol.prestador_telefone, extra: null };
+%>
+<section class="tela tela-estreita">
+  <a class="voltar" href="/pedidos"><svg class="ic" aria-hidden="true"><use href="#i-voltar"/></svg>Pedidos</a>
+  <div class="titulo-linha">
+    <h1>Solicitação #<%= sol.id %></h1>
+    <%- include('../partials/status', { status: sol.status }) %>
+  </div>
+  <div class="resumo">
+    <dl>
+      <dt><%= outro.titulo %></dt><dd><%= outro.nome %><%= outro.extra ? ' · ' + outro.extra : '' %></dd>
+      <dt>Serviço</dt><dd><%= sol.servico_titulo %> <span class="meta">(<%= sol.categoria_nome %>)</span></dd>
+      <dt>Data desejada</dt><dd><%= formatarData(sol.data_desejada) %></dd>
+      <dt>Valor base</dt><dd><%= formatarPreco(sol.valor) %></dd>
+      <dt>Pedido em</dt><dd><%= dataHora(sol.criado_em) %></dd>
+    </dl>
+    <% if (sol.observacao) { %><p class="obs"><strong>Observação:</strong> <%= sol.observacao %></p><% } %>
+  </div>
+
+  <ol class="linha-tempo" aria-label="Andamento">
+    <% ['pendente', 'aceita', 'em_andamento', 'concluida'].forEach((st, i, arr) => {
+         const idx = arr.indexOf(sol.status); const feito = idx >= i; %>
+      <li class="<%= feito ? 'feito' : '' %> <%= sol.status === st ? 'atual' : '' %>"><%= rotuloStatus[st] %></li>
+    <% }) %>
+  </ol>
+  <% if (sol.status === 'recusada' || sol.status === 'cancelada') { %>
+    <p class="alerta alerta-aviso">Esta solicitação foi <%= rotuloStatus[sol.status].toLowerCase() %>.</p>
+  <% } %>
+
+  <% if (contatoLiberado && outro.fone) { %>
+    <div class="contato">
+      <svg class="ic" aria-hidden="true"><use href="#i-fone"/></svg>
+      <span>Contato: <strong><%= formatarTelefone(outro.fone) %></strong></span>
+      <a class="btn btn-secundario" href="<%= linkWhatsApp(outro.fone) %>" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+  <% } else if (sol.status === 'pendente') { %>
+    <p class="nota">O telefone de contato é liberado para as duas partes quando o prestador aceita o pedido.</p>
+  <% } %>
+
+  <% if (proximos.length) { %>
+    <div class="acoes">
+      <% proximos.forEach((st) => { const perigo = st === 'recusada' || st === 'cancelada'; %>
+        <form method="post" action="/pedidos/<%= sol.id %>/status" <%- perigo ? 'data-confirmar="Tem certeza? Esta ação não pode ser desfeita."' : '' %>>
+          <input type="hidden" name="_csrf" value="<%= csrf %>">
+          <input type="hidden" name="status" value="<%= st %>">
+          <button class="btn btn-bloco <%= perigo ? 'btn-perigo' : 'btn-primario' %>"><%= rotuloAcao[st] %></button>
+        </form>
+      <% }) %>
+    </div>
+  <% } %>
+
+  <% if (podeAvaliar) { %>
+    <a class="btn btn-acento btn-bloco" href="/pedidos/<%= sol.id %>/avaliar">Avaliar serviço</a>
+  <% } else if (sol.avaliacao_id) { %>
+    <p class="avaliado">Avaliação registrada: <%- include('../partials/estrelas', { media: sol.avaliacao_nota }) %></p>
+  <% } %>
+</section>
+<%- include('../partials/fim') %>

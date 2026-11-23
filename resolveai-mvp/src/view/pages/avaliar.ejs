@@ -1,0 +1,23 @@
+<%- include('../partials/topo') %>
+<section class="tela tela-estreita">
+  <a class="voltar" href="/pedidos/<%= sol.id %>"><svg class="ic" aria-hidden="true"><use href="#i-voltar"/></svg>Voltar</a>
+  <h1>Avaliar</h1>
+  <p><strong><%= sol.prestador_nome %></strong><br><span class="sub">Serviço concluído: <%= sol.servico_titulo %></span></p>
+  <form method="post" action="/pedidos/<%= sol.id %>/avaliar" class="form" novalidate>
+    <input type="hidden" name="_csrf" value="<%= csrf %>">
+    <fieldset class="campo<%= erros.nota ? ' com-erro' : '' %>">
+      <legend>Sua nota</legend>
+      <div class="nota-input">
+        <% for (let n = 5; n >= 1; n--) { %>
+          <input type="radio" id="nota-<%= n %>" name="nota" value="<%= n %>" <%= Number(dados.nota) === n ? 'checked' : '' %>>
+          <label for="nota-<%= n %>" title="<%= n %> de 5"><svg class="ic" aria-hidden="true"><use href="#i-estrela"/></svg><span class="sr"><%= n %> estrela<%= n > 1 ? 's' : '' %></span></label>
+        <% } %>
+      </div>
+      <% if (erros.nota) { %><small class="erro"><%= erros.nota %></small><% } %>
+    </fieldset>
+    <%- include('../partials/campo', { nome: 'comentario', rotulo: 'Comentário (opcional)', area: true, valor: dados.comentario, erro: erros.comentario, attrs: 'maxlength="500" placeholder="Conte como foi sua experiência…"' }) %>
+    <p class="nota">Sua avaliação ficará pública no perfil do prestador, junto com seu primeiro nome.</p>
+    <button class="btn btn-primario btn-bloco">Enviar avaliação</button>
+  </form>
+</section>
+<%- include('../partials/fim') %>

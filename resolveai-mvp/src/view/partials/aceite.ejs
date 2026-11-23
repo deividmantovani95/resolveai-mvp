@@ -1,0 +1,7 @@
+<div class="campo campo-check<%= erros.aceiteTermos ? ' com-erro' : '' %>">
+  <label class="check">
+    <input type="checkbox" name="aceiteTermos" value="1" required>
+    <span>Li e aceito os <a href="/termos" target="_blank">Termos de Uso</a> e a <a href="/privacidade" target="_blank">Política de Privacidade</a>.</span>
+  </label>
+  <% if (erros.aceiteTermos) { %><small class="erro"><%= erros.aceiteTermos %></small><% } %>
+</div>

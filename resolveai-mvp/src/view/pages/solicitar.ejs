@@ -1,0 +1,21 @@
+<%- include('../partials/topo') %>
+<section class="tela tela-estreita">
+  <a class="voltar" href="/servicos/<%= servico.id %>"><svg class="ic" aria-hidden="true"><use href="#i-voltar"/></svg>Voltar</a>
+  <h1>Contratar</h1>
+  <div class="resumo">
+    <span class="rotulo">Resumo</span>
+    <dl>
+      <dt>Serviço</dt><dd><%= servico.titulo %></dd>
+      <dt>Prestador</dt><dd><%= servico.prestador_nome %></dd>
+      <dt>Valor base</dt><dd><%= formatarPreco(servico.preco) %></dd>
+    </dl>
+  </div>
+  <form method="post" action="/servicos/<%= servico.id %>/solicitar" class="form" novalidate>
+    <input type="hidden" name="_csrf" value="<%= csrf %>">
+    <%- include('../partials/campo', { nome: 'dataDesejada', rotulo: 'Data desejada', tipo: 'date', valor: dados.dataDesejada, erro: erros.dataDesejada, attrs: 'required min="' + hoje + '"' }) %>
+    <%- include('../partials/campo', { nome: 'observacao', rotulo: 'Observação (opcional)', area: true, valor: dados.observacao, erro: erros.observacao, dica: 'Descreva o problema, o melhor horário ou o bairro. Não informe senhas ou dados de cartão.', attrs: 'maxlength="500"' }) %>
+    <p class="nota">O pagamento é combinado diretamente com o prestador. O valor final pode variar conforme a avaliação no local.</p>
+    <button class="btn btn-primario btn-bloco">Confirmar solicitação</button>
+  </form>
+</section>
+<%- include('../partials/fim') %>

@@ -1,0 +1,38 @@
+<%- include('../partials/topo') %>
+<section class="tela">
+  <h1>Painel administrativo</h1>
+  <div class="painel-resumo tres">
+    <div class="indicador destaque"><strong><%= contagem.pendente || 0 %></strong><span>aguardando aprovação</span></div>
+    <div class="indicador"><strong><%= contagem.aprovado || 0 %></strong><span>aprovados</span></div>
+    <div class="indicador"><strong><%= contagem.rejeitado || 0 %></strong><span>rejeitados</span></div>
+  </div>
+  <h2>Prestadores</h2>
+  <ul class="lista-admin">
+    <% prestadores.forEach((p) => { %>
+      <li class="<%= p.status_aprovacao === 'pendente' ? 'pendente' : '' %>">
+        <div class="linha-admin">
+          <span class="avatar"><%= iniciais(p.nome) %></span>
+          <div class="card-corpo">
+            <strong><%= p.nome %></strong>
+            <span class="meta"><%= p.email %> · <%= formatarTelefone(p.telefone) %></span>
+            <span class="meta">Atende: <%= p.area_atendimento %> · cadastro em <%= dataHora(p.criado_em) %></span>
+          </div>
+          <span class="status st-aprov-<%= p.status_aprovacao %>"><%= rotuloAprovacao[p.status_aprovacao] %></span>
+        </div>
+        <details>
+          <summary>Ver descrição</summary>
+          <p class="pre"><%= p.descricao %></p>
+        </details>
+        <div class="acoes-linha">
+          <% if (p.status_aprovacao !== 'aprovado') { %>
+            <form method="post" action="/admin/prestadores/<%= p.id %>/aprovar"><input type="hidden" name="_csrf" value="<%= csrf %>"><button class="btn btn-primario">Aprovar</button></form>
+          <% } %>
+          <% if (p.status_aprovacao !== 'rejeitado') { %>
+            <form method="post" action="/admin/prestadores/<%= p.id %>/rejeitar" data-confirmar="Rejeitar <%= p.nome %>? Os serviços deixarão de aparecer na busca."><input type="hidden" name="_csrf" value="<%= csrf %>"><button class="btn btn-perigo">Rejeitar</button></form>
+          <% } %>
+        </div>
+      </li>
+    <% }) %>
+  </ul>
+</section>
+<%- include('../partials/fim') %>

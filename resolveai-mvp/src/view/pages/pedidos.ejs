@@ -1,0 +1,31 @@
+<%- include('../partials/topo') %>
+<section class="tela">
+  <h1><%= titulo %></h1>
+  <nav class="abas" aria-label="Filtrar solicitações">
+    <a class="<%= filtro === 'todas' ? 'ativo' : '' %>" href="/pedidos">Todas</a>
+    <a class="<%= filtro === 'pendentes' ? 'ativo' : '' %>" href="/pedidos?filtro=pendentes">Em aberto</a>
+    <a class="<%= filtro === 'concluidas' ? 'ativo' : '' %>" href="/pedidos?filtro=concluidas">Encerradas</a>
+  </nav>
+  <% if (solicitacoes.length) { %>
+    <ul class="lista-pedidos">
+      <% solicitacoes.forEach((s) => { %>
+        <li>
+          <a href="/pedidos/<%= s.id %>">
+            <span class="pedido-topo">
+              <strong><%= usuario.tipo === 'prestador' ? primeiroNome(s.cliente_nome) : s.prestador_nome %> · <%= s.servico_titulo %></strong>
+              <%- include('../partials/status', { status: s.status }) %>
+            </span>
+            <span class="meta">#<%= s.id %> · <svg class="ic" aria-hidden="true"><use href="#i-calendario"/></svg> <%= formatarData(s.data_desejada) %> · <%= formatarPreco(s.valor) %></span>
+            <% if (usuario.tipo === 'cliente' && s.status === 'concluida' && !s.avaliacao_id) { %><span class="tag-acao">Avalie este serviço</span><% } %>
+          </a>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <div class="vazio">
+      <p>Nenhuma solicitação por aqui.</p>
+      <% if (usuario.tipo === 'cliente') { %><a class="btn btn-primario" href="/servicos">Buscar serviços</a><% } %>
+    </div>
+  <% } %>
+</section>
+<%- include('../partials/fim') %>

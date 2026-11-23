@@ -1,0 +1,43 @@
+<%- include('../partials/topo') %>
+<section class="tela">
+  <div class="perfil-topo">
+    <span class="avatar grande"><%= iniciais(perfil.nome) %></span>
+    <div>
+      <h1><%= perfil.nome %></h1>
+      <span class="meta"><svg class="ic" aria-hidden="true"><use href="#i-local"/></svg> <%= perfil.area_atendimento %></span>
+      <% if (selo) { %><br><span class="selo-rep"><%= selo %></span><% } %>
+    </div>
+  </div>
+  <p class="pre"><%= perfil.descricao %></p>
+
+  <div class="reputacao">
+    <div class="rep-media">
+      <strong><%= reputacao.total ? reputacao.media.toFixed(1).replace('.', ',') : '–' %></strong>
+      <%- include('../partials/estrelas', { media: reputacao.media }) %>
+      <span class="meta"><%= reputacao.total %> <%= reputacao.total === 1 ? 'avaliação' : 'avaliações' %></span>
+    </div>
+    <ul class="rep-barras" aria-label="Distribuição das notas">
+      <% [5, 4, 3, 2, 1].forEach((n) => { const q = reputacao['n' + n]; const pct = reputacao.total ? Math.round(q / reputacao.total * 100) : 0; %>
+        <li><span><%= n %>★</span><span class="rep-barra"><span style="width: <%= pct %>%"></span></span><span><%= q %></span></li>
+      <% }) %>
+    </ul>
+  </div>
+
+  <h2>Serviços</h2>
+  <div class="lista-cards">
+    <% servicos.forEach((s) => { %><%- include('../partials/card-servico', { s }) %><% }) %>
+  </div>
+
+  <h2>Avaliações</h2>
+  <% if (avaliacoes.length) { %>
+    <ul class="avaliacoes">
+      <% avaliacoes.forEach((a) => { %>
+        <li>
+          <div><%- include('../partials/estrelas', { media: a.nota }) %> <strong><%= primeiroNome(a.cliente_nome) %></strong> <span class="meta">· <%= a.servico_titulo %> · <%= formatarData(new Date(a.criado_em).toISOString()) %></span></div>
+          <% if (a.comentario) { %><p><%= a.comentario %></p><% } %>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %><p class="vazio">Este prestador ainda não recebeu avaliações.</p><% } %>
+</section>
+<%- include('../partials/fim') %>

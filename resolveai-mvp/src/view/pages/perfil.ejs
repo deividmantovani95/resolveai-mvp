@@ -1,0 +1,53 @@
+<%- include('../partials/topo') %>
+<section class="tela tela-estreita">
+  <div class="perfil-topo">
+    <span class="avatar grande"><%= iniciais(usuario.nome) %></span>
+    <div>
+      <h1><%= usuario.nome %></h1>
+      <span class="meta"><%= { cliente: 'Cliente', prestador: 'Prestador de serviços', admin: 'Administrador' }[usuario.tipo] %></span>
+      <% if (perfil) { %><br><span class="status st-aprov-<%= perfil.status_aprovacao %>"><%= rotuloAprovacao[perfil.status_aprovacao] %></span><% } %>
+    </div>
+  </div>
+  <% if (perfil && perfil.status_aprovacao === 'aprovado') { %>
+    <p><a href="/prestadores/<%= usuario.id %>">Ver meu perfil público</a></p>
+  <% } %>
+
+  <h2>Meus dados</h2>
+  <form method="post" action="/perfil" class="form" novalidate>
+    <input type="hidden" name="_csrf" value="<%= csrf %>">
+    <%- include('../partials/form-dados-pessoais', { dados, erros, comSenha: false }) %>
+    <% if (perfil) { %><%- include('../partials/form-perfil-prestador', { dados, erros }) %><% } %>
+    <button class="btn btn-primario btn-bloco">Salvar dados</button>
+  </form>
+
+  <h2>Alterar senha</h2>
+  <form method="post" action="/perfil/senha" class="form" novalidate>
+    <input type="hidden" name="_csrf" value="<%= csrf %>">
+    <%- include('../partials/campo', { nome: 'senhaAtual', rotulo: 'Senha atual', tipo: 'password', erro: errosSenha.senhaAtual, attrs: 'autocomplete="current-password" required' }) %>
+    <%- include('../partials/campo', { nome: 'novaSenha', rotulo: 'Nova senha', tipo: 'password', erro: errosSenha.novaSenha, dica: 'Mínimo de 8 caracteres, com letras e números.', attrs: 'autocomplete="new-password" required' }) %>
+    <%- include('../partials/campo', { nome: 'confirmarSenha', rotulo: 'Confirmar nova senha', tipo: 'password', erro: errosSenha.confirmarSenha, attrs: 'autocomplete="new-password" required' }) %>
+    <button class="btn btn-secundario btn-bloco">Alterar senha</button>
+  </form>
+
+  <h2>Privacidade e dados (LGPD)</h2>
+  <div class="cartao-lgpd">
+    <p>Você pode baixar uma cópia dos seus dados ou excluir sua conta a qualquer momento. Saiba mais na <a href="/privacidade">Política de Privacidade</a>.</p>
+    <a class="btn btn-secundario btn-bloco" href="/perfil/meus-dados">Baixar meus dados (JSON)</a>
+    <% if (usuario.tipo !== 'admin') { %>
+      <details class="zona-perigo">
+        <summary>Excluir minha conta</summary>
+        <p>Seus dados pessoais serão apagados e pedidos em aberto serão cancelados. O histórico de avaliações é mantido de forma anônima. Esta ação não pode ser desfeita.</p>
+        <form method="post" action="/perfil/excluir" class="form" data-confirmar="Excluir sua conta definitivamente?">
+          <input type="hidden" name="_csrf" value="<%= csrf %>">
+          <%- include('../partials/campo', { nome: 'senhaConfirmacao', rotulo: 'Confirme com sua senha', tipo: 'password', erro: null, attrs: 'autocomplete="current-password" required' }) %>
+          <button class="btn btn-perigo btn-bloco">Excluir conta</button>
+        </form>
+      </details>
+    <% } %>
+  </div>
+  <form method="post" action="/logout" class="espaco">
+    <input type="hidden" name="_csrf" value="<%= csrf %>">
+    <button class="btn btn-secundario btn-bloco">Sair</button>
+  </form>
+</section>
+<%- include('../partials/fim') %>

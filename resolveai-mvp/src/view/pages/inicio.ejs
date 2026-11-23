@@ -1,0 +1,42 @@
+<%- include('../partials/topo') %>
+<section class="tela">
+  <div class="hero">
+    <h1><% if (usuario) { %>Olá, <%= primeiroNome(usuario.nome) %>!<% } else { %>Precisa de um conserto em casa?<% } %></h1>
+    <p class="sub">Encontre profissionais avaliados para pequenos serviços residenciais e de informática.</p>
+    <form action="/servicos" method="get" class="busca" role="search">
+      <svg class="ic" aria-hidden="true"><use href="#i-busca"/></svg>
+      <input type="search" name="q" placeholder="Buscar serviços…" aria-label="Buscar serviços">
+      <button class="btn btn-primario">Buscar</button>
+    </form>
+  </div>
+
+  <h2>Categorias</h2>
+  <div class="grade-categorias">
+    <% categorias.forEach((c) => { %>
+      <a class="categoria cat-<%= c.slug %>" href="/servicos?categoria=<%= c.slug %>">
+        <span class="selo-cat cat-<%= c.slug %>"><svg class="ic" aria-hidden="true"><use href="#i-<%= ICONES_CATEGORIA[c.slug] %>"/></svg></span>
+        <span><%= c.nome %></span>
+      </a>
+    <% }) %>
+  </div>
+
+  <h2>Destaques</h2>
+  <% if (destaques.length) { %>
+    <div class="lista-cards">
+      <% destaques.forEach((s) => { %><%- include('../partials/card-servico', { s }) %><% }) %>
+    </div>
+  <% } else { %>
+    <p class="vazio">Ainda não há serviços publicados.</p>
+  <% } %>
+
+  <% if (!usuario) { %>
+    <div class="chamada">
+      <div>
+        <strong>Você é prestador de serviços?</strong>
+        <p>Crie seu perfil, publique seus serviços e receba pedidos de clientes da sua região.</p>
+      </div>
+      <a class="btn btn-acento" href="/cadastro/prestador">Quero divulgar meus serviços</a>
+    </div>
+  <% } %>
+</section>
+<%- include('../partials/fim') %>

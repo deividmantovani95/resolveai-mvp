@@ -1,0 +1,14 @@
+# Sobe apenas o banco PostgreSQL para desenvolvimento local: docker compose up -d
+services:
+  banco:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: resolveai
+    ports:
+      - "5432:5432"
+    volumes:
+      - dados-pg:/var/lib/postgresql/data
+volumes:
+  dados-pg:

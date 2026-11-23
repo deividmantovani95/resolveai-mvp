@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1f4e5f">
+  <title><%= titulo ? titulo + ' · ' : '' %><%= appNome %></title>
+  <link rel="stylesheet" href="/css/estilo.css">
+  <link rel="icon" href="/img/icone.svg" type="image/svg+xml">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <script src="/js/app.js" defer></script>
+</head>
+<body class="<%= usuario ? 'logado tipo-' + usuario.tipo : 'visitante' %>">
+<%- include('icones') %>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+<header class="barra">
+  <div class="barra-interna">
+    <a class="marca" href="/"><svg class="ic" aria-hidden="true"><use href="#i-chave"/></svg><span><%= appNome %></span></a>
+    <nav class="nav-topo" aria-label="Navegação principal">
+      <%- include('nav', { classe: 'topo' }) %>
+    </nav>
+  </div>
+</header>
+<main id="conteudo" class="conteudo">
+<% if (flash) { %>
+  <div class="alerta alerta-<%= flash.tipo %>" role="status"><%= flash.texto %></div>
+<% } %>

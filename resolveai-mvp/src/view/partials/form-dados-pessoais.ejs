@@ -1,0 +1,8 @@
+<%- include('campo', { nome: 'nome', rotulo: 'Nome completo', valor: dados.nome, erro: erros.nome, attrs: 'autocomplete="name" required maxlength="120"' }) %>
+<%- include('campo', { nome: 'email', rotulo: 'E-mail', tipo: 'email', valor: dados.email, erro: erros.email, attrs: 'autocomplete="email" required placeholder="email@exemplo.com"' }) %>
+<%- include('campo', { nome: 'telefone', rotulo: 'Telefone (WhatsApp)', tipo: 'tel', valor: dados.telefone ? formatarTelefone(dados.telefone) || dados.telefone : '', erro: erros.telefone, attrs: 'autocomplete="tel" inputmode="tel" required placeholder="(19) 99999-9999"' }) %>
+<%- include('campo', { nome: 'cidade', rotulo: 'Cidade', valor: dados.cidade, erro: erros.cidade, attrs: 'autocomplete="address-level2" required placeholder="Ex.: Mogi Mirim"' }) %>
+<% if (typeof comSenha !== 'undefined' && comSenha) { %>
+  <%- include('campo', { nome: 'senha', rotulo: 'Senha', tipo: 'password', erro: erros.senha, dica: 'Mínimo de 8 caracteres, com letras e números.', attrs: 'autocomplete="new-password" required minlength="8"' }) %>
+  <%- include('campo', { nome: 'confirmarSenha', rotulo: 'Confirmar senha', tipo: 'password', erro: erros.confirmarSenha, attrs: 'autocomplete="new-password" required' }) %>
+<% } %>

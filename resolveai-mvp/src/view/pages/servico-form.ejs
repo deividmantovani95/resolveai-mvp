@@ -1,0 +1,15 @@
+<%- include('../partials/topo') %>
+<section class="tela tela-estreita">
+  <a class="voltar" href="/prestador/servicos"><svg class="ic" aria-hidden="true"><use href="#i-voltar"/></svg>Meus serviços</a>
+  <h1><%= titulo %></h1>
+  <form method="post" action="<%= edicao ? '/prestador/servicos/' + dados.id + '/editar' : '/prestador/servicos' %>" class="form" novalidate>
+    <input type="hidden" name="_csrf" value="<%= csrf %>">
+    <%- include('../partials/campo', { nome: 'titulo', rotulo: 'Título', valor: dados.titulo, erro: erros.titulo, attrs: 'required maxlength="100" placeholder="Ex.: Formatação de PC"' }) %>
+    <%- include('../partials/campo', { nome: 'categoriaId', rotulo: 'Categoria', valor: dados.categoriaId, erro: erros.categoriaId, opcoes: categorias.map((c) => ({ valor: c.id, texto: c.nome })) }) %>
+    <%- include('../partials/campo', { nome: 'preco', rotulo: 'Preço base (R$)', valor: dados.preco, erro: erros.preco, attrs: 'inputmode="decimal" required placeholder="0,00"' }) %>
+    <%- include('../partials/campo', { nome: 'disponibilidade', rotulo: 'Disponibilidade', valor: dados.disponibilidade, erro: erros.disponibilidade, attrs: 'required maxlength="160" placeholder="Dias / horários"' }) %>
+    <%- include('../partials/campo', { nome: 'descricao', rotulo: 'Descrição', area: true, valor: dados.descricao, erro: erros.descricao, attrs: 'required maxlength="1000"' }) %>
+    <button class="btn btn-primario btn-bloco"><%= edicao ? 'Salvar alterações' : 'Publicar serviço' %></button>
+  </form>
+</section>
+<%- include('../partials/fim') %>

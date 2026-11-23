@@ -1,0 +1,49 @@
+<%- include('../partials/topo') %>
+<section class="tela">
+  <h1>Olá, <%= primeiroNome(usuario.nome) %>!</h1>
+  <% if (perfil.status_aprovacao !== 'aprovado') { %>
+    <div class="alerta alerta-aviso">
+      <strong><%= rotuloAprovacao[perfil.status_aprovacao] %>.</strong>
+      <% if (perfil.status_aprovacao === 'pendente') { %>Seus serviços só aparecem para os clientes depois que o administrador aprovar seu cadastro.<% } else { %>Seu cadastro não foi aprovado. Revise seu perfil ou entre em contato com o suporte.<% } %>
+    </div>
+  <% } %>
+  <div class="painel-resumo">
+    <a href="/pedidos?filtro=pendentes" class="indicador">
+      <strong><%= pendentes %></strong><span><%= pendentes === 1 ? 'nova solicitação' : 'novas solicitações' %></span>
+    </a>
+    <a href="/prestadores/<%= usuario.id %>" class="indicador">
+      <strong><%= perfil.total_avaliacoes ? perfil.media_avaliacoes.toFixed(1).replace('.', ',') : '–' %></strong><span>reputação (<%= perfil.total_avaliacoes %> aval.)</span>
+    </a>
+  </div>
+
+  <div class="titulo-linha">
+    <h2>Serviços publicados</h2>
+    <a class="btn btn-primario" href="/prestador/servicos/novo"><svg class="ic" aria-hidden="true"><use href="#i-mais"/></svg>Novo serviço</a>
+  </div>
+  <% if (servicos.length) { %>
+    <ul class="lista-gestao">
+      <% servicos.forEach((s) => { %>
+        <li>
+          <span class="selo-cat cat-<%= s.categoria_slug %>"><svg class="ic" aria-hidden="true"><use href="#i-<%= ICONES_CATEGORIA[s.categoria_slug] %>"/></svg></span>
+          <div class="card-corpo">
+            <strong><%= s.titulo %></strong>
+            <span class="meta"><%= s.categoria_nome %> · <%= formatarPreco(s.preco) %></span>
+          </div>
+          <div class="acoes-linha">
+            <a href="/prestador/servicos/<%= s.id %>/editar">Editar</a>
+            <form method="post" action="/prestador/servicos/<%= s.id %>/excluir" data-confirmar="Excluir o serviço &quot;<%= s.titulo %>&quot;?">
+              <input type="hidden" name="_csrf" value="<%= csrf %>">
+              <button class="link perigo">Excluir</button>
+            </form>
+          </div>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <div class="vazio">
+      <p>Você ainda não publicou nenhum serviço.</p>
+      <a class="btn btn-primario" href="/prestador/servicos/novo">Publicar meu primeiro serviço</a>
+    </div>
+  <% } %>
+</section>
+<%- include('../partials/fim') %>
