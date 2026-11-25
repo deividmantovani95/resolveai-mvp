@@ -1,5 +1,10 @@
 # ResolveAí — MVP do Trabalho de Graduação (ADS · Fatec Mogi Mirim)
 
+- **Autores:** Deivid César Mantovani, Felipe Lopes dos Santos e Lucas de Campos Gonçalves
+- **Orientador:** Prof. Thales de Társis Cezare
+- **Curso:** Tecnologia em Análise e Desenvolvimento de Sistemas, Fatec Mogi Mirim "Arthur de Azevedo"
+- **Site de demonstração:** (link a incluir após a publicação)
+
 Plataforma web responsiva (celular primeiro) que conecta clientes a prestadores de pequenos serviços residenciais e de suporte técnico: elétrica simples, hidráulica simples, reparos gerais, informática e montagem/ajustes.
 
 > "ResolveAí" é um **nome provisório**. Para trocar, altere `APP_NAME` no `.env` e o nome em `public/manifest.webmanifest`.
@@ -54,7 +59,8 @@ npm install
 docker compose up -d          # opcional: cria o banco "resolveai" (usuário/senha postgres)
 
 # 3. Configuração
-cp .env.example .env          # ajuste DATABASE_URL se necessário
+cp .env.example .env          # Linux/macOS; no Windows: copy .env.example .env
+                              # ajuste DATABASE_URL se necessário
 
 # 4. Tabelas + dados de exemplo
 npm run db:reset
@@ -63,7 +69,7 @@ npm run db:reset
 npm run dev                   # http://localhost:3000 (reinicia ao salvar arquivos)
 ```
 
-Sem Docker, crie o banco antes do passo 4: `createdb resolveai` (ou `CREATE DATABASE resolveai;` no psql/pgAdmin).
+Sem Docker, crie o banco antes do passo 4: `createdb resolveai` (ou `CREATE DATABASE resolveai;` no psql/pgAdmin). Se o seu PostgreSQL usar outro usuário ou senha, ajuste `DATABASE_URL` no `.env`.
 
 ### Usuários de exemplo (senha `Senha123`)
 
@@ -80,6 +86,7 @@ Todos os nomes, telefones e avaliações do seed são **fictícios**, criados s�
 
 ```bash
 createdb resolveai_teste      # banco separado, apagado a cada execução
+                              # com Docker: docker compose exec banco createdb -U postgres resolveai_teste
 npm test                      # 16 testes: regras do Model + fluxos completos
 ```
 
@@ -93,7 +100,12 @@ Sugestão: **Render** para o site e **Neon** para o PostgreSQL. Qualquer provedo
 2. Crie um banco no Neon e copie a *connection string*.
 3. Crie as tabelas e os dados de exemplo uma vez, a partir do seu computador:
    ```bash
+   # Linux/macOS
    DATABASE_URL="<string do Neon>" DATABASE_SSL=true npm run db:reset
+   ```
+   ```powershell
+   # Windows (PowerShell)
+   $env:DATABASE_URL="<string do Neon>"; $env:DATABASE_SSL="true"; npm run db:reset
    ```
 4. No Render, crie um **Web Service** ligado ao repositório:
    - Build command: `npm install`
